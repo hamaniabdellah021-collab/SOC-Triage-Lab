@@ -27,8 +27,7 @@ $url = '[https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1566
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri $url -OutFile$env:TEMP\PhishingAttachment.xlsm
 
-
-
+```
 ## Step 2: Telemetry & Log Analysis (Sysmon)
 ### A. Outbound Network Connection (Sysmon Event ID 3)
 Sysmon captured an outbound network connection initiated by PowerShell to fetch the malicious document over HTTPS (Port 443).
