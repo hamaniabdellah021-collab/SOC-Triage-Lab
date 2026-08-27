@@ -28,22 +28,22 @@ $url = '[https://github.com/redcanaryco/atomic-red-team/raw/master/atomics/T1566
 Invoke-WebRequest -Uri $url -OutFile$env:TEMP\PhishingAttachment.xlsm
 
 
-## Step 2: Telemetry & Log Analysis (Sysmon)
 
-A. Outbound Network Connection (Sysmon Event ID 3)
+## Step 2: Telemetry & Log Analysis (Sysmon)
+### A. Outbound Network Connection (Sysmon Event ID 3)
 Sysmon captured an outbound network connection initiated by PowerShell to fetch the malicious document over HTTPS (Port 443).
 
-Timestamp: 2026-08-27 06:51:26.106 UTC
+    Timestamp: 2026-08-27 06:51:26.106 UTC
 
-Process: powershell.exe (PID: 10024)
+    Process: powershell.exe (PID: 10024) 
 
-Path: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+    Path: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
 
-Source: 192.168.100.52:29372
+     Source: 192.168.100.52:29372
 
-Destination: 140.82.121.3:443 (lb-140-82-121-3-fra.github.com)
+     Destination: 140.82.121.3:443 (lb-140-82-121-3-fra.github.com)
 
-B. File Creation Detection (Sysmon Event ID 11)
+###   B. File Creation Detection (Sysmon Event ID 11)
 Sysmon captured the file creation event as powershell.exe dropped the macro-enabled binary into the local temp folder.
 
 Timestamp: 2026-08-27 06:51:47.359 UTC
@@ -54,12 +54,12 @@ Target Filename: C:\Users\vboxuser\AppData\Local\Temp\PhishingAttachment.xlsm
 
 Creation Time: 2026-08-22 17:02:17.788
 
-4. Verdict & Root Cause Analysis
-Verdict: True Positive (Drive-by Download / Phishing Artifact Dropper Simulation).
+##        4. Verdict & Root Cause Analysis
+           Verdict: True Positive (Drive-by Download / Phishing Artifact Dropper Simulation).
 
-Root Cause: Script/User execution via powershell.exe fetching a macro-enabled Excel document (.xlsm) from an external GitHub repository into an unmonitored temporary user location (%TEMP%).
+            Root Cause: Script/User execution via powershell.exe fetching a macro-enabled Excel document (.xlsm) from an external GitHub repository into an unmonitored temporary user location (%TEMP%).
 
-5. Containment & Remediation Plan
+##           5. Containment & Remediation Plan
 Artifact Removal: Purged the malicious file PhishingAttachment.xlsm from C:\Users\vboxuser\AppData\Local\Temp\.
 
 Process Suppression: Terminated active instances of powershell.exe (PID 10024).
@@ -67,6 +67,7 @@ Process Suppression: Terminated active instances of powershell.exe (PID 10024).
 Detection Engineering: Deployed a SIEM correlation rule flagging powershell.exe initiating outbound network connections that drop Office files (.xlsm, .docm) into %TEMP% directories.
 
 Endpoint Hardening: Recommended enforcing PowerShell Constrained Language Mode and Microsoft Defender Attack Surface Reduction (ASR) rules.
+
 
 
 
